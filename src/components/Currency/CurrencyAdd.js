@@ -3,7 +3,6 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import Alert from 'react-bootstrap/Alert';
 
 class CurrencyAdd extends React.Component {
 
@@ -34,6 +33,7 @@ class CurrencyAdd extends React.Component {
             [name]: value,
             stateAvailable: this.checkAddInput(value)
         });
+        console.log(name, value);
     }
 
     addCurrency(){
@@ -57,9 +57,17 @@ class CurrencyAdd extends React.Component {
     }
 
     render(){
-        let listCurrencies;
-        listCurrencies = this.props.currencies.map(function(item){
-            return (<li>{item}</li>);
+        // let listCurrencies;
+        // listCurrencies = this.props.currencies.map(function(item){
+        //     return (<li>{item}</li>);
+        // });
+
+        const renderDropdownCurrencies = this.props.currencies.map(function(item, index){
+            return (
+                <option value={item}>
+                    {item}
+                </option>
+            );
         });
 
         const renderButtonShowForm =
@@ -74,11 +82,13 @@ class CurrencyAdd extends React.Component {
                 <Col>
                     <Form.Control
                         size="sm"
-                        type="text"
+                        as="select"
                         name="currency"
                         value={this.state.currency}
                         onChange={this.handleChange}
-                        placeholder="Add More Currencies..." />
+                        placeholder="Add More Currencies...">
+                        {renderDropdownCurrencies}
+                    </Form.Control>
                 </Col>
                 <Button onClick={this.addCurrency} size="sm">
                     + Submit
@@ -90,20 +100,6 @@ class CurrencyAdd extends React.Component {
         return (
             <Form className="CurrencyAdd">
                 {renderBody}
-                <Form.Group>
-                    {this.state.stateAvailable && this.state.currency !== '' ?
-                        <Alert variant='success' style={{textAlign:'left'}}>
-                            Currency {this.state.currency} is supported.
-                        </Alert>
-                        :
-                        this.state.currency !== '' ?
-                        <Alert variant='danger' style={{textAlign:'left'}}>
-                            <p> Currency <b>{this.state.currency}</b> not supported! Supported currencies are: </p>
-                            <ul>
-                                {listCurrencies}
-                            </ul>
-                        </Alert> : ''}
-                </Form.Group>
             </Form>
         );
     }
