@@ -32,13 +32,33 @@ class Currency extends React.Component {
         this.getInputValue = this.getInputValue.bind(this);
         this.addCurrency = this.addCurrency.bind(this);
         this.deleteCurrency = this.deleteCurrency.bind(this);
+        this.getRateList = this.getRateList.bind(this);
+    }
+
+    getRateList(loadedRates){
+        const inputValue = parseFloat(this.state.inputValue);
+        const currenciesName = this.state.currenciesName;
+        const viewedCurrencies = this.state.viewedCurrencies;
+
+        let rateList = viewedCurrencies.map(function(key){
+            const rate = loadedRates[key];
+            const convertedValue = inputValue * rate;
+            const currencyName = currenciesName[key];
+
+            return {
+                currency: key,
+                currencyName: key + ' - ' + currencyName,
+                rate: rate,
+                convertedValue: convertedValue
+            }
+        });
+
+        return rateList;
     }
 
     loadExchangeRateFromSource(value, viewedCurrencies){
         const symbols = viewedCurrencies.join();
         const url = 'https://api.exchangeratesapi.io/latest?base=' + this.state.baseCurrency + "&symbols=" + symbols;
-        const inputValue = parseFloat(value);
-        const currenciesName = this.state.currenciesName;
 
         this.setState({
             inputValue: value,
@@ -49,18 +69,7 @@ class Currency extends React.Component {
         fetch(url).then(result => {
             return result.json();
         }).then(result => {
-            let rateList = viewedCurrencies.map(function(key){
-                const rate = result.rates[key];
-                const convertedValue = inputValue * rate;
-                const currencyName = currenciesName[key];
-
-                return {
-                    currency: key,
-                    currencyName: key + ' - ' + currencyName,
-                    rate: rate,
-                    convertedValue: convertedValue
-                }
-            });
+            const rateList = this.getRateList(result.rates);
 
             this.setState({
                 isLoading: false,
