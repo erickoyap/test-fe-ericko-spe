@@ -29,7 +29,7 @@ class Currency extends React.Component {
             rateList: []
         };
 
-        this.getInput = this.getInput.bind(this);
+        this.getInputValue = this.getInputValue.bind(this);
         this.addCurrency = this.addCurrency.bind(this);
         this.deleteCurrency = this.deleteCurrency.bind(this);
     }
@@ -49,7 +49,6 @@ class Currency extends React.Component {
         fetch(url).then(result => {
             return result.json();
         }).then(result => {
-
             let rateList = viewedCurrencies.map(function(key){
                 const rate = result.rates[key];
                 const convertedValue = inputValue * rate;
@@ -74,7 +73,7 @@ class Currency extends React.Component {
         this.loadExchangeRateFromSource(this.state.inputValue, this.state.viewedCurrencies);
     }
 
-    getInput(value){
+    getInputValue(value){
         this.loadExchangeRateFromSource(value, this.state.viewedCurrencies);
     }
 
@@ -102,7 +101,7 @@ class Currency extends React.Component {
                 <Container>
                     <h6 style={{textAlign:"left"}}>USD - United States Dollars</h6>
                     <CurrencyInput
-                        funcInput={this.getInput} />
+                        funcInput={this.getInputValue} />
                     <CurrencyTable
                         baseCurrency={this.state.baseCurrency}
                         rateList={this.state.rateList}

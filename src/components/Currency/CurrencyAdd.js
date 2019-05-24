@@ -33,7 +33,6 @@ class CurrencyAdd extends React.Component {
             [name]: value,
             stateAvailable: this.checkAddInput(value)
         });
-        console.log(name, value);
     }
 
     addCurrency(){
@@ -57,11 +56,6 @@ class CurrencyAdd extends React.Component {
     }
 
     render(){
-        // let listCurrencies;
-        // listCurrencies = this.props.currencies.map(function(item){
-        //     return (<li>{item}</li>);
-        // });
-
         const renderDropdownCurrencies = this.props.currencies.map(function(item, index){
             return (
                 <option value={item}>
